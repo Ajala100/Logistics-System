@@ -12,8 +12,12 @@ import africa.semicolon.logisticSystem.utils.ModelMapper;
 import java.util.Optional;
 
 public class TrackingServiceImpl implements TrackingService{
+
     private final PackageService packageService = new PackageServiceImpl();
+
     private  static final TrackingInformationRepository trackingRepo = new TrackingInformationRepositoryImpl();
+
+
     @Override
     public AddTrackingInfoResponse updateTrackingInfo(AddTrackingInfoRequest addTrackingInfoRequest) {
         //verify package id is correct
@@ -40,6 +44,11 @@ public class TrackingServiceImpl implements TrackingService{
         // return response dto
 
 
-        return ModelMapper.map(trackingData, addTrackingInfoRequest)//.getPackageId());
+        return ModelMapper.map(trackingData, addTrackingInfoRequest);
+    }
+
+    @Override
+    public TrackingInformation trackPackage(Integer packageId) {
+        return trackingRepo.findByPackageId(packageId).get();
     }
 }
