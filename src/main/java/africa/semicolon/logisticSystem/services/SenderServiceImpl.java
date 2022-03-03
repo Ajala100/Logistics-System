@@ -6,6 +6,7 @@ import africa.semicolon.logisticSystem.data.repositories.SenderRepositoryImpl;
 import africa.semicolon.logisticSystem.dtos.requests.RegisterSenderRequest;
 import africa.semicolon.logisticSystem.dtos.responses.RegisterSenderResponse;
 import africa.semicolon.logisticSystem.exceptions.DuplicateUserException;
+import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
 import africa.semicolon.logisticSystem.utils.ModelMapper;
 
 import java.util.List;
@@ -16,27 +17,42 @@ public class SenderServiceImpl implements SenderService {
 
     @Override
     public RegisterSenderResponse registerSender(RegisterSenderRequest registerSenderRequest){
-        Optional<Sender> savedSender = senderRepository.findSenderByEmail(registerSenderRequest.getSenderEmail());
+        Optional<Sender> senderInDatabase = senderRepository.findSenderByEmail(registerSenderRequest.getSenderEmail());
         if(senderInDatabase.isPresent())
-            throw new DuplicateUserException(registerSenderRequest)
-        //convert to sender
-       // Sender sender = new Sender();
+            throw new DuplicateUserException(registerSenderRequest.getSenderEmail() + " already exists");
+//        convert to sender
+//        Sender sender = new Sender();
 //        sender.setSenderName(registerSenderRequest.getSenderName());
 //        sender.setPhoneNumber(registerSenderRequest.getPhoneNumber());
 //        sender.setEmailAddress(registerSenderRequest.getSenderEmail());
-        Sender sender = ModelMapper.map(registerSenderRequest)
+
+        Sender sender = ModelMapper.map(registerSenderRequest);
+
         //save sender
+
         Sender savedSender = senderRepository.save(sender);
+
         //convert sender to DTO
-//        RegisterSenderResponse response = new RegisterSenderResponse();
-//        response.setSenderEmail(savedSender.getEmailAddress());
-        RegisterSenderResponse =
+
+////        RegisterSenderResponse response = new RegisterSenderResponse();
+////        response.setSenderEmail(savedSender.getEmailAddress());
+//        RegisterSenderResponse =
+
         // return DTO
-        return null;
+        return ModelMapper.map(savedSender);
     }
 
     @Override
     public List<Sender> getSenders() {
-        return null;
+        return senderRepository.findAll();
+    }
+
+    @Override
+    public void deleteAllSenders() {senderRepository.deleteAll(); }
+
+    @Override
+    public Optional<Sender> findSenderByEmail(String email) throws UserDoesNotExistException {
+        if(!senderRepository.findSenderByEmail(email).isPresent()) throw new UserDoesNotExistException("Sender does not exist");
+        return senderRepository.findSenderByEmail(email);
     }
 }
