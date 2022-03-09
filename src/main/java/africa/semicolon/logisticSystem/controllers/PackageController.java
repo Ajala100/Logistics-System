@@ -1,5 +1,6 @@
 package africa.semicolon.logisticSystem.controllers;
 
+import africa.semicolon.logisticSystem.data.models.Package;
 import africa.semicolon.logisticSystem.dtos.requests.AddPackageRequest;
 import africa.semicolon.logisticSystem.dtos.responses.AddPackageResponse;
 import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
@@ -16,8 +17,8 @@ import javax.print.attribute.IntegerSyntax;
 
 public class PackageController {
     private final PackageService packageService = new PackageServiceImpl();
-    @PostMapping("/api/addpackage")
 
+    @PostMapping("/api/addpackage")
     public ResponseEntity <?> addPackage(@RequestBody AddPackageRequest addPackageRequest){
         try{
             AddPackageResponse response = packageService.addPackage(addPackageRequest);
@@ -32,8 +33,9 @@ public class PackageController {
 //        return packageService.addPackage(addPackageRequest);
 //    }
 
+    @GetMapping("/api/findPackage/{id}")
     public Package findPackageById(@PathVariable("id") Integer id){
-        return packageService.findMyPackageWIthMy(id); }
+        return packageService.findMyPackageWIthId(id); }
 //    @GetMapping("api/package/{email}")
 //    public Package findPackageBySenderEmail(@PathVariable("email") String email){
 //        return packageService.findMyPackageWIthSenderEmail(email);
