@@ -3,6 +3,7 @@ package africa.semicolon.logisticSystem.controllers;
 import africa.semicolon.logisticSystem.data.models.Sender;
 import africa.semicolon.logisticSystem.dtos.requests.RegisterSenderRequest;
 import africa.semicolon.logisticSystem.dtos.responses.RegisterSenderResponse;
+import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
 import africa.semicolon.logisticSystem.services.SenderService;
 import africa.semicolon.logisticSystem.services.SenderServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,8 @@ public class SenderController {
         return senderService.registerSender(registerSenderRequest);
     }
 
-    @GetMapping("/api/v1/sender/{id}")
-    public Optional <Sender> getSenderById(@PathVariable String email){
-        return senderService.findSenderByEmail(emmail);
+    @GetMapping("/api/v1/sender/{email}")
+    public Optional <Sender> getSenderById(@PathVariable String email) throws UserDoesNotExistException {
+        return senderService.findSenderByEmail(email);
     }
 }
