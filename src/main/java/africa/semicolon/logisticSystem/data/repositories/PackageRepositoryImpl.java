@@ -2,6 +2,7 @@ package africa.semicolon.logisticSystem.data.repositories;
 
 import africa.semicolon.logisticSystem.data.models.Package;
 import africa.semicolon.logisticSystem.data.models.Sender;
+import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
 import africa.semicolon.logisticSystem.services.SenderService;
 import africa.semicolon.logisticSystem.services.SenderServiceImpl;
 
@@ -42,8 +43,13 @@ public class PackageRepositoryImpl implements PackageRepository{
     public void delete(Integer id) {database.remove(id); }
 
     @Override
-    public Package findPackageBySenderEmail(String email) {
-        Optional <Sender> sender = senderService.findyBySenderEmail(email);
+    public Package findPackageBySenderEmail(String email) throws UserDoesNotExistException {
+        Optional <Sender> sender = senderService.findSenderByEmail(email);
+        Set<Integer> keys = database.keySet();
+        for(Integer key: keys){
+            if(Objects.equals(database.get(key).getSenderEmail(), sender.get().getEmailAddress()))
+                return database.get(key);
+        }
         return null;
     }
 
