@@ -12,7 +12,7 @@ public interface SenderRepository {
 
     void delete(Sender sender);
 
-    void deleteByEmail(Sender email);
+    void deleteByEmail(String email);
 
     List<Sender> findAll();
 
