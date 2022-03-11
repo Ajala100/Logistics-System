@@ -11,7 +11,7 @@ import africa.semicolon.logisticSystem.utils.ModelMapper;
 
 import java.util.Optional;
 
-public class TrackingServiceImpl implements TrackingService{
+public class  TrackingServiceImpl implements TrackingService{
 
     private final PackageService packageService = new PackageServiceImpl();
 
@@ -19,9 +19,9 @@ public class TrackingServiceImpl implements TrackingService{
 
 
     @Override
-    public AddTrackingInfoResponse updateTrackingInfo(AddTrackingInfoRequest addTrackingInfoRequest) {
+    public AddTrackingInfoResponse updateTrackingInfo(AddTrackingInfoRequest addTrackingInfoRequest){
         //verify package id is correct
-        var aPackage = packageService.findMyPackageWIthMy(addTrackingInfoRequest.getPackageId());
+        var aPackage = packageService.findMyPackageWIthId(addTrackingInfoRequest.getPackageId());
         if (aPackage == null) throw new InvalidPackageIdException("Package Id is invalid");
 
         TrackingData trackingData = new TrackingData(addTrackingInfoRequest.getEvent());
