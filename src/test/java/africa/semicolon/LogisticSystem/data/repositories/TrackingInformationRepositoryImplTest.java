@@ -27,9 +27,22 @@ class TrackingInformationRepositoryImplTest {
     @Test
     void save(){
         TrackingInformation trackingInformation = new TrackingInformation();
-        trackingInformation.setPackageId();
+        trackingInformation.setPackageId(2);
+        TrackingData trackingData = new TrackingData("Package Ready for dispatch");
+        trackingInformation.getTrackingData().add(trackingData);
+        TrackingInformation savedInfo = trackingInformationRepository.save(trackingInformation);
+        assertEquals(savedInfo, trackingInformation);
+        assertEquals(1, trackingInformationRepository.findAll().size());
     }
 
+    private TrackingInformation saveTestHelper(){
+        TrackingInformation trackingInformation = new TrackingInformation();
+        trackingInformation.setPackageId(342234);
+        TrackingData trackingData = new TrackingData("Package Ready for Dispatch");
+        trackingInformation.getTrackingData().add(trackingData);
+        TrackingInformation savedInfo = trackingInformationRepository.save(trackingInformation);
+        return  savedInfo;
+    }
 
     @Test
     void findAll(){
@@ -37,15 +50,6 @@ class TrackingInformationRepositoryImplTest {
         assertEquals(1, trackingInformationRepository.findAll().size());
     }
 
-    private TrackingInformation saveTestHelper(){
-        TrackingInformation trackingInformation = new TrackingInformation();
-        trackingInformation.setPackageId(342234);
-        TrackingData trackingData = new TrackingData();
-        trackingData.setEvent("Package Ready for Dispatch");
-        trackingInformation.getTrackingData().add(trackingData);
-        TrackingInformation savedInfo = trackingInformationRepository.save(trackingInformation);
-        return  savedInfo;
-    }
     @Test
     void deleteAll(){
         saveTestHelper();
@@ -57,7 +61,7 @@ class TrackingInformationRepositoryImplTest {
     @Test
     void findByPackageId(){
         TrackingInformation savedTrackingInformation = saveTestHelper();
-        Optional <TrackingInformation> optionalTrackingInformation = trackingInformationRepository.findByPackageId(savedTrackingInformaion.getPackageId());
+        Optional <TrackingInformation> optionalTrackingInformation = trackingInformationRepository.findByPackageId(savedTrackingInformation.getPackageId());
         assertTrue (optionalTrackingInformation.isPresent());
         assertEquals (savedTrackingInformation, optionalTrackingInformation.get());
     }
@@ -75,6 +79,6 @@ class TrackingInformationRepositoryImplTest {
         TrackingInformation savedInfo = saveTestHelper();
         assertEquals(1,trackingInformationRepository.findAll().size());
         trackingInformationRepository.delete(savedInfo);
-        assertEquals((0, trackingInformationRepository.findAll().size());
+        assertEquals(0, trackingInformationRepository.findAll().size());
     }
 }
