@@ -4,6 +4,7 @@ import africa.semicolon.logisticSystem.data.models.Sender;
 import africa.semicolon.logisticSystem.dtos.requests.RegisterSenderRequest;
 import africa.semicolon.logisticSystem.dtos.responses.RegisterSenderResponse;
 import africa.semicolon.logisticSystem.exceptions.DuplicateUserException;
+import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
 import africa.semicolon.logisticSystem.services.SenderService;
 import africa.semicolon.logisticSystem.services.SenderServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -30,6 +31,7 @@ public class SenderServiceImplTest {
         registerSenderRequest.setSenderEmail("Jerry@email.com");
         registerSenderRequest.setPhoneNumber("1234567");
         RegisterSenderResponse response = senderService.registerSender(registerSenderRequest);
+
         assertEquals(response.getSenderEmail(), registerSenderRequest.getSenderEmail());
         assertEquals(1, senderService.getSenders().size());
     }
@@ -47,5 +49,11 @@ public class SenderServiceImplTest {
     void duplicateEmail_throwsExceptionTest(){
         registerSenderTestHelper();
         assertThrows(DuplicateUserException.class, ()-> registerSenderTestHelper());
+    }
+
+    @Test
+    void nonExistingSenderEmail_ThrowsException(){
+        registerSenderTestHelper();
+        assertThrows(UserDoesNotExistException.class, ()-> senderService.findSenderByEmail("bola@gmail.com"));
     }
 }
