@@ -18,7 +18,10 @@ public class TrackingInformationRepositoryImpl implements TrackingInformationRep
     public List<TrackingInformation> findAll() {
         Set<Integer> keys = database.keySet();
         List <TrackingInformation> all = new ArrayList<>();
-        return null;
+        for(Integer key : keys){
+            all.add(database.get(key));
+        }
+        return all;
     }
 
     @Override
