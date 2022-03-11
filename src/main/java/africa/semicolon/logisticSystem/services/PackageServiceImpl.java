@@ -6,18 +6,21 @@ import africa.semicolon.logisticSystem.data.repositories.PackageRepository;
 import africa.semicolon.logisticSystem.data.repositories.PackageRepositoryImpl;
 import africa.semicolon.logisticSystem.dtos.requests.AddPackageRequest;
 import africa.semicolon.logisticSystem.dtos.responses.AddPackageResponse;
+import africa.semicolon.logisticSystem.exceptions.InvalidPackageIdException;
 import africa.semicolon.logisticSystem.exceptions.UserDoesNotExistException;
 import africa.semicolon.logisticSystem.utils.ModelMapper;
+
+import java.util.Optional;
 
 public class PackageServiceImpl implements PackageService{
     private final PackageRepository packageRepository = new PackageRepositoryImpl();
 
     @Override
-    public AddPackageResponse addPackage(AddPackageRequest addPackageRequest) throws UserDoesNotExistException {
+    public AddPackageResponse addPackage(AddPackageRequest addPackageRequest) {
         //Sender senderOptional = senderSer
         //convert addPackage request to a package
         Package aPackage = ModelMapper.map(addPackageRequest);
-        if(aPackage == null) throw new UserDoesNotExistException("Request is null");
+        if(aPackage == null) throw new IllegalArgumentException("Request is null");
 
         //save package
         Package savedPackage = packageRepository.save(aPackage);
@@ -30,9 +33,9 @@ public class PackageServiceImpl implements PackageService{
     }
 
     @Override
-    public java.lang.Package findMyPackageWIthMy(Integer id) {
-        return null;
+    public Package findMyPackageWIthId(Integer id) {
+        Optional<Package> queryResult = Optional.of(packageRepository.findPackageById(id));
+        if(queryResult.isEmpty()) throw new InvalidPackageIdException("Package does not exist");
+        else return queryResult.get();
     }
-
-
 }
