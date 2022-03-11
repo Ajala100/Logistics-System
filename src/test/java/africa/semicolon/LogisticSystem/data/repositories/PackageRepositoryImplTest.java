@@ -21,8 +21,8 @@ class PackageRepositoryImplTest {
     void tearDown() {
     }
 
-    @Test
-    void saveNewPackageTest() {
+
+    public Package savePackage() {
         Package aPackage = new Package();
         aPackage.setName("Sleeping Mat");
         aPackage.setSenderEmail("Jerry");
@@ -31,27 +31,25 @@ class PackageRepositoryImplTest {
         aPackage.setDeliverAddress("312 Herbert Macaulay Way, Sabo Yaba Lagos");
         aPackage.setNetWeight(23.5);
 
-        Package savedPackage = packageRepository.save(aPackage);
-        savedPackage.setName("Sniper");
-        Package updatedPackage = packageRepository.save(savedPackage);
-        assertEquals(1, updatedPackage.getId());
+        return packageRepository.save(aPackage);
     }
 
     @Test
+    void saveNewPackageTest(){
+        Package savedPackage = savePackage();
+        assertEquals(1, savedPackage.getId());
+    }
+
+
+    @Test
     void findAll() {
+        Package savedPackage = savePackage();
+        assertEquals(1, packageRepository.findAll().size());
     }
 
     @Test
     void delete() {
-        Package aPackage = new Package();
-        aPackage.setName("Sleeping Mat");
-        aPackage.setSenderEmail("Jerry@gmail.com");
-        aPackage.setReceiverName("Dharmmy");
-        aPackage.setReceiverPhone("004994883");
-        aPackage.setDeliverAddress("312 Herbert Macaulay Way, Sabo Yaba Lagos");
-        aPackage.setNetWeight(23.5);
-
-        Package savedPackage = packageRepository.save(aPackage);
+        Package savedPackage = savePackage();
         assertEquals(1, packageRepository.findAll().size());
 
         packageRepository.delete(savedPackage);
@@ -60,6 +58,8 @@ class PackageRepositoryImplTest {
 
     @Test
     void deleteByTrackingNumber() {
+        Package savedPackage = savePackage();
+        assertEquals(savedPackage, packageRepository.findPackageById(1));
     }
 
     @Test
