@@ -21,7 +21,7 @@ public class SenderRepositoryImpl implements SenderRepository{
     }
 
     @Override
-    public void deleteByEmail(Sender email) {
+    public void deleteByEmail(String email) {
         database.remove(email);
     }
 
